@@ -3,7 +3,7 @@
 ## This is a very simple algorithm with no error checking.
 ##             Note: only works with SQUARE matrices
 ##
-## Eric W. Johnson, 1/25/2015
+## Eric W. Johnson, 3/6/2015
 ## File cachematrix.R
 
 ## Usage:
@@ -32,6 +32,8 @@
      ## xcm$getinverse() gets (returns) the inverse of xcm
      ## xcm$setinverse(x) sets (initializes) the inverse of xcm to the matrix x
      ## xcm$ischanged() returns TRUE if matrix x is new or changed
+## Note: The ischanged method is redundant, leaving in to demonstrate an alternate way.
+## Hopefully it will help clarify the process of adding "methods"
 makeCacheMatrix <- function(x = matrix()) {
      m <- NULL        ## local variable to store the inverse of x
      isch <- TRUE     ## local variable to store the ischanged value
@@ -50,12 +52,14 @@ makeCacheMatrix <- function(x = matrix()) {
           ischanged = ischanged)
 }
 
-
 ################################################################################
 ## This function computes the inverse of the special "CacheMatrix" object
 ## If the inverse has already been calculated (and the matrix has not changed), 
 ## then the cacheSolve retrieves the inverse from the cache.
+## If the inverse has not already been calculated, cacheSolve creates it.
 ## cacheSolve calls the methods of the "CacheMatrix" object passed in.
+## Note: the call to x$ischanged() is redundant, leaving in to demonstrate an alternate way.
+## There was a lot of discussion in the forums about the pros and cons of using just !is.null(m)
 cacheSolve <- function(x, ...) {
      ## Return a matrix that is the inverse of 'x'
      m <- x$getinverse()
@@ -64,7 +68,7 @@ cacheSolve <- function(x, ...) {
           return(m)
      }
      data <- x$get()
-     m <- solve(data)
+     m <- solve(data)    ## create inverse of x
      x$setinverse(m)
      m
 }
